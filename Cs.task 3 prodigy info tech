@@ -1,0 +1,60 @@
+import re
+
+class PasswordStrengthChecker:
+    def _init_(self, password):
+        self.password = password
+        self.length = len(password)
+        self.score = 0
+
+    def check_length(self):
+        if self.length >= 12:
+            self.score += 2
+        elif self.length >= 8:
+            self.score += 1
+
+    def check_uppercase(self):
+        if re.search(r'[A-Z]', self.password):
+            self.score += 1
+
+    def check_lowercase(self):
+        if re.search(r'[a-z]', self.password):
+            self.score += 1
+
+    def check_numbers(self):
+        if re.search(r'[0-9]', self.password):
+            self.score += 1
+
+    def check_special_characters(self):
+        if re.search(r'[!@#$%^&*(),.?":{}|<>]', self.password):
+            self.score += 1
+
+    def assess_strength(self):
+        self.check_length()
+        self.check_uppercase()
+        self.check_lowercase()
+        self.check_numbers()
+        self.check_special_characters()
+
+        # Give feedback
+        if self.score <= 2:
+            strength = "Weak"
+            feedback = "Try adding more characters, uppercase letters, numbers, and special symbols."
+        elif self.score <= 4:
+            strength = "Moderate"
+            feedback = "Good, but consider adding more length and special characters."
+        else:
+            strength = "Strong"
+            feedback = "Excellent! Your password is strong."
+
+        return strength, feedback
+
+# ---------------- Main Program ----------------
+if _name_ == "_main_":
+    print("=== Password Strength Checker ===")
+    password = input("Enter a password to check: ").strip()
+
+    checker = PasswordStrengthChecker(password)
+    strength, feedback = checker.assess_strength()
+
+    print(f"\nPassword Strength: {strength}")
+    print(f"Feedback: {feedback}")
